@@ -3,18 +3,26 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import com.kauailabs.navx.frc.AHRS;
 
 public class DriveTrain extends SubsystemBase {
   private final WPI_TalonSRX _leftDriveTalon;
   private final WPI_TalonSRX _rightDriveTalon;
   private AHRS navx = new AHRS(SPI.Port.kMXP);
+  private double circumference  = 47.12; // in centimeters
+  private final int ticksInOneRevolution = 4096; 
  
+  private DifferentialDrive _diffDrive;
+  
   // creates a new drive train 
   public DriveTrain() {
     _leftDriveTalon = new WPI_TalonSRX(Constants.DriveTrainPorts.LeftDriveTalonPort);
@@ -49,11 +57,11 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getPosition(){
-    return (((_leftDriveTalon.getSelectedSensorPosition(0) + _rightDriveTalon.getSelectedSensorPosition(0))/2)*(circumference/ticksInOneRevolution));
+    return (((_leftDriveTalon.getSelectedSensorPosition(0) + _rightDriveTalon.getSelectedSensorPosition(0))/2) * (circumference/ticksInOneRevolution));
   }
 
   public double getVelocity(){
-    return (((_leftDriveTalon.getSensorCollection().getPulseWidthVelocity() + _rightDriveTalon.getSensorCollection().getPulseWidthVelocity())/2)*(circumference/ticksInOneRevolution));
+    return (((_leftDriveTalon.getSensorCollection().getPulseWidthVelocity() + _rightDriveTalon.getSensorCollection().getPulseWidthVelocity())/2) * (circumference/ticksInOneRevolution));
  }
 
  public double getAngleAndReset(){
@@ -72,7 +80,6 @@ public class DriveTrain extends SubsystemBase {
  
  public void tankDrive(double leftSpeed, double rightSpeed) {
     _diffDrive.tankDrive(leftSpeed, rightSpeed);
-
   }
 
   public void arcadeDrive(double speed, double rotation) {
