@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -18,7 +19,7 @@ public class DriveTrain extends SubsystemBase {
   private final WPI_TalonSRX _leftDriveTalon;
   private final WPI_TalonSRX _rightDriveTalon;
   private AHRS navx = new AHRS(SPI.Port.kMXP);
-  private double circumference  = 47.12; // in centimeters
+  private double ticksToCm  = 80.0/10180.5; // in centimeters
   private final int ticksInOneRevolution = 4096; 
  
   private DifferentialDrive _diffDrive;
@@ -28,16 +29,17 @@ public class DriveTrain extends SubsystemBase {
     _leftDriveTalon = new WPI_TalonSRX(Constants.DriveTrainPorts.LeftDriveTalonPort);
     _rightDriveTalon = new WPI_TalonSRX(Constants.DriveTrainPorts.RightDriveTalonPort);
 
-    _leftDriveTalon.setInverted(false);
+    _leftDriveTalon.setInverted(true);
     _rightDriveTalon.setInverted(false);
 
     _diffDrive = new DifferentialDrive(_leftDriveTalon, _rightDriveTalon);
 
     _leftDriveTalon.configFactoryDefault();
-    _leftDriveTalon.setInverted(false);
     _leftDriveTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
     _rightDriveTalon.configFactoryDefault();
-    _rightDriveTalon.setInverted(false);
+
+
+
     _rightDriveTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
  
   }
@@ -57,12 +59,24 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getPosition(){
-    return (((_leftDriveTalon.getSelectedSensorPosition(0) + _rightDriveTalon.getSelectedSensorPosition(0))/2) * (circumference/ticksInOneRevolution));
+    return (((_leftDriveTalon.getSelectedSensorPosition(0) + _rightDriveTalon.getSelectedSensorPosition(0))/2) * (ticksToCm));
   }
 
   public double getVelocity(){
-    return (((_leftDriveTalon.getSensorCollection().getPulseWidthVelocity() + _rightDriveTalon.getSensorCollection().getPulseWidthVelocity())/2) * (circumference/ticksInOneRevolution));
+    return (((_leftDriveTalon.getSensorCollection().getPulseWidthVelocity() + _rightDriveTalon.getSensorCollection().getPulseWidthVelocity())/2) * (ticksToCm));
  }
+
+  public double getTicks(){
+    return (_leftDriveTalon.getSelectedSensorPosition(0) + _rightDriveTalon.getSelectedSensorPosition(0)) / 2;
+  }
+
+  public double getLeftTicks(){
+    return _leftDriveTalon.getSelectedSensorPosition(0);
+  }
+
+  public double getRightTicks(){
+    return _rightDriveTalon.getSelectedSensorPosition(0);
+  }
 
  public double getAngleAndReset(){
    double degrees = navx.getAngle();
@@ -78,8 +92,10 @@ public class DriveTrain extends SubsystemBase {
    navx.reset();
  }
  
- public void tankDrive(double leftSpeed, double rightSpeed) {
-    _diffDrive.tankDrive(leftSpeed, rightSpeed);
+  public void tankDrive(double leftSpeed, double rightSpeed) {
+    _leftDriveTalon.set(ControlMode.PercentOutput, -leftSpeed);
+    _rightDriveTalon.set(ControlMode.PercentOutput, -rightSpeed);
+    //_diffDrive.tankDrive(leftSpeed, rightSpeed);
   }
 
   public void arcadeDrive(double speed, double rotation) {
