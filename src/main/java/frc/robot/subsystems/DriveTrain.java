@@ -5,13 +5,14 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+
 import com.kauailabs.navx.frc.AHRS;
 
 public class DriveTrain extends SubsystemBase {
@@ -40,11 +41,6 @@ public class DriveTrain extends SubsystemBase {
     _rightDriveTalon.setInverted(false);
     _rightDriveTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
  
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
   }
 
   public void resetEncoders(){
@@ -84,6 +80,14 @@ public class DriveTrain extends SubsystemBase {
 
   public void arcadeDrive(double speed, double rotation) {
     _diffDrive.arcadeDrive(speed, rotation);
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+
+    arcadeDrive(RobotContainer.getLeftJoy().getY(), RobotContainer.getRightJoy().getX());
+    //tankDrive(RobotContainer.getLeftJoy().getY(), RobotContainer.getRightJoy().getY());
   }
 
 }

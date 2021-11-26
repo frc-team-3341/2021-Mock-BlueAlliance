@@ -13,6 +13,15 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    public static int leftJoy = 0;
+    public static int rightJoy = 1;
+
+    //change these ports as necessary--look at driverstation to find correct ports
+    public static int angle1Button = 8;
+    public static int angle2Button = 8;
+    public static int angle3Button = 8;
+
     public static final class DriveTrainPorts {
         public static final int LeftDriveTalonPort = 2;
         public static final int RightDriveTalonPort = 3;
@@ -28,5 +37,9 @@ public final class Constants {
         public static final int Zero = 0;
         public static final int One = 1;
 
+    }
+
+    public static final class ArmPorts{
+        public static final int ArmPort = 4;
     }
 }
