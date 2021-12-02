@@ -32,6 +32,7 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("TankDrive");
     _driveTrain.tankDrive(-0.8 * _leftJoystick.getRawAxis(Constants.JoystickAxis.YAxis),
                           -0.8 * _rightJoystick.getRawAxis(Constants.JoystickAxis.YAxis));  
   }
