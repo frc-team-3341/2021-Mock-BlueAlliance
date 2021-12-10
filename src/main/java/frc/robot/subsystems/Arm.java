@@ -14,13 +14,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
   private final WPI_TalonSRX arm;
 
   // need to get correct armGearRatio from hardware--this value is inaccurate
-  private double armGearRatio = 16.0/50.0;
+  private double armGearRatio = 1.0;
 
   public Arm() {
     //be sure to go in pheonixTuner and reconfig + edit this port in the code
@@ -35,14 +36,14 @@ public class Arm extends SubsystemBase {
 
   // getting reading of absolute encoder
   public double getArmTicks(){
-    return arm.getSelectedSensorPosition();
+    return arm.getSelectedSensorPosition() * -1;
   }
 
   // this method will definitely need testing
   // suggest just returning getArmTicks first
   public double getArmAngle(){
     // note: returning angle in degrees
-    return (arm.getSelectedSensorPosition() / 4096.0) * armGearRatio * 360;
+    return ((arm.getSelectedSensorPosition() * -1) / 4096.0) * armGearRatio * 360;
   }
 
   // resetting absolute encoder
@@ -52,7 +53,8 @@ public class Arm extends SubsystemBase {
 
   // setting power to arm talon
   public void setArmPower(double power){
-    arm.set(ControlMode.PercentOutput, power);
+    SmartDashboard.putNumber("subsystem power: ", power);
+    arm.set(ControlMode.PercentOutput, power * -1);
   }
 
   // different settings of talon
@@ -66,6 +68,10 @@ public class Arm extends SubsystemBase {
     }
   }
 
+  public int isFwdLSClosed(){
+    return arm.isFwdLimitSwitchClosed();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run--meaning you can easily test from here!
@@ -73,6 +79,10 @@ public class Arm extends SubsystemBase {
     // putting values on smartdashboard to help w/ debugging
     SmartDashboard.putNumber("Arm Ticks: ", getArmTicks());
     SmartDashboard.putNumber("Current Angle: ", getArmAngle());
+    SmartDashboard.putNumber("Fwd LS: ", arm.isFwdLimitSwitchClosed());
+    SmartDashboard.putNumber("Rev LS: ", arm.isRevLimitSwitchClosed());
+
+    //setArmPower(-RobotContainer.getLeftJoy().getY());
 
     // resetting absolute encoder when arm is upright
     // check to figure out if it's when Rev or Fwd limit switch is open

@@ -86,7 +86,7 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    arcadeDrive(RobotContainer.getLeftJoy().getY(), RobotContainer.getRightJoy().getX());
+    //arcadeDrive(RobotContainer.getLeftJoy().getY(), RobotContainer.getLeftJoy().getX());
     //tankDrive(RobotContainer.getLeftJoy().getY(), RobotContainer.getRightJoy().getY());
   }
 
