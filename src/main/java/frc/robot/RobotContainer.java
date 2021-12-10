@@ -13,7 +13,6 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ResetArm;
 import frc.robot.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoDrive2M;
 import frc.robot.commands.DriveToALine;
@@ -21,7 +20,6 @@ import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.DriveToALine;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -91,6 +89,7 @@ public class RobotContainer {
   public static DriveTrain getDriveTrain(){
     return _driveTrain;
   }
+
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return null;
@@ -107,5 +106,4 @@ public class RobotContainer {
   public static Joystick getRightJoy(){
     return rightJoy;
   }
-
 }
