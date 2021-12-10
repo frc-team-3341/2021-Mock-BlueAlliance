@@ -5,18 +5,23 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+
+import frc.robot.commands.ArmSetAngle;
+import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ResetArm;
+import frc.robot.subsystems.Arm;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoDrive2M;
 import frc.robot.commands.DriveToALine;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveToALine;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -27,7 +32,6 @@ import frc.robot.commands.DriveToALine;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private static DriveTrain _driveTrain;
   private final Joystick _leftJoystick;
@@ -37,9 +41,17 @@ public class RobotContainer {
   private static DriveToALine _driveToLine;
   private static AutoDrive2M test;
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+
+  private static final Arm m_arm = new Arm();
+  public static Joystick leftJoy = new Joystick(Constants.leftJoy);
+  public static Joystick rightJoy = new Joystick(Constants.rightJoy);
+  public static JoystickButton arm1, arm2, arm3, arm4;
+
+  // fill in with appropriate angles needed for mechanism
+  private double[] armAngles = {28, 45, 89};
+
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  
   public RobotContainer() {
     // Configure the button bindings
     _driveTrain = new DriveTrain();
@@ -60,8 +72,17 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    arm1 = new JoystickButton(leftJoy, Constants.angle1Button);
+    arm2 = new JoystickButton(leftJoy, Constants.angle2Button);
+    arm3 = new JoystickButton(leftJoy, Constants.angle3Button);
+    arm4 = new JoystickButton(leftJoy, Constants.angle4Button);
 
+    arm1.toggleWhenPressed(new ArmSetAngle(armAngles[0]));
+    arm2.toggleWhenPressed(new ArmSetAngle(armAngles[1]));
+    arm3.toggleWhenPressed(new ArmSetAngle(armAngles[2]));
+    arm4.toggleWhenPressed(new ResetArm());
   }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -72,7 +93,19 @@ public class RobotContainer {
   }
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return test;
+    return null;
+  }
+
+  public static Arm returnArm(){
+    return m_arm;
+  }
+
+  public static Joystick getLeftJoy(){
+    return leftJoy;
+  }
+
+  public static Joystick getRightJoy(){
+    return rightJoy;
   }
 
 }
