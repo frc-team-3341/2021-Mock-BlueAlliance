@@ -7,13 +7,21 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+
 import frc.robot.commands.ArmSetAngle;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ResetArm;
 import frc.robot.subsystems.Arm;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.AutoDrive2M;
+import frc.robot.commands.DriveToALine;
+import frc.robot.commands.TankDrive;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.DriveToALine;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,6 +33,14 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  private static DriveTrain _driveTrain;
+  private final Joystick _leftJoystick;
+  private final Joystick _rightJoystick;
+ // private final TankDrive _tankDrive;
+  private final ArcadeDrive _arcadeDrive;
+  private static DriveToALine _driveToLine;
+  private static AutoDrive2M test;
+
 
   private static final Arm m_arm = new Arm();
   public static Joystick leftJoy = new Joystick(Constants.leftJoy);
@@ -35,9 +51,18 @@ public class RobotContainer {
   private double[] armAngles = {28, 45, 89};
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  
   public RobotContainer() {
     // Configure the button bindings
+    _driveTrain = new DriveTrain();
+    _leftJoystick = new Joystick(Constants.USBOrder.Zero);
+    _rightJoystick = new Joystick(Constants.USBOrder.One);
+    // _tankDrive = new TankDrive(_driveTrain, _leftJoystick, _rightJoystick);
+    _arcadeDrive = new ArcadeDrive(_driveTrain, _leftJoystick);
+    _driveTrain.setDefaultCommand(_arcadeDrive);
     configureButtonBindings();
+    _driveToLine = new DriveToALine();
+    test = new AutoDrive2M(_driveTrain, 200);
   }
 
   /**
@@ -63,6 +88,9 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  public static DriveTrain getDriveTrain(){
+    return _driveTrain;
+  }
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return null;
@@ -79,4 +107,5 @@ public class RobotContainer {
   public static Joystick getRightJoy(){
     return rightJoy;
   }
+
 }
