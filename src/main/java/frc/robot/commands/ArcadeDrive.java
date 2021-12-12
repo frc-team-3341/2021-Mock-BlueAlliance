@@ -32,8 +32,8 @@ public class ArcadeDrive extends CommandBase {
   public void execute(){
     SmartDashboard.putNumber("LeftTicks", _driveTrain.getLeftTicks());
     SmartDashboard.putNumber("RightTicks", _driveTrain.getRightTicks());
-    _driveTrain.arcadeDrive(0.8 * _joystick.getRawAxis(Constants.JoystickAxis.XAxis),
-      0.8 * _joystick.getRawAxis(Constants.JoystickAxis.YAxis));
+    /*_driveTrain.arcadeDrive(0.8 * _joystick.getRawAxis(Constants.JoystickAxis.XAxis),
+      0.8 * _joystick.getRawAxis(Constants.JoystickAxis.YAxis));*/
   }
 
   // Called once the command ends or is interrupted.

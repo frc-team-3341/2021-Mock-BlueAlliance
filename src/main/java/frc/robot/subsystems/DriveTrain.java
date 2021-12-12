@@ -103,6 +103,6 @@ public class DriveTrain extends SubsystemBase {
     // This method will be called once per scheduler run
 
     //arcadeDrive(RobotContainer.getLeftJoy().getY(), RobotContainer.getLeftJoy().getX());
-    //tankDrive(RobotContainer.getLeftJoy().getY(), RobotContainer.getRightJoy().getY());
+    tankDrive(-RobotContainer.getRightJoy().getY(), -RobotContainer.getLeftJoy().getY());
   }
 }

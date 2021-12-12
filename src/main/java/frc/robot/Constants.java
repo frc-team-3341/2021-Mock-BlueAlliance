@@ -18,10 +18,11 @@ public final class Constants {
     public static int rightJoy = 1;
 
     //change these ports as necessary--look at driverstation to find correct ports
-    public static int angle1Button = 5;
-    public static int angle2Button = 3;
-    public static int angle3Button = 4;
-    public static int angle4Button = 6;
+    public static int crateButton = 5;
+    public static int angle1Button = 3;
+    public static int angle2Button = 4;
+    public static int resetButton = 11;
+    public static int angle3Button = 6;
 
     public static final class DriveTrainPorts {
         public static final int LeftDriveTalonPort = 1;
