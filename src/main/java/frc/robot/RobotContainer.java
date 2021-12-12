@@ -17,6 +17,7 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoDrive2M;
 import frc.robot.commands.DriveToALine;
 import frc.robot.commands.TankDrive;
+import frc.robot.commands.Test;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,15 +39,16 @@ public class RobotContainer {
   private final ArcadeDrive _arcadeDrive;
   private static DriveToALine _driveToLine;
   private static AutoDrive2M test;
+  private static Test test1;
 
 
   private static final Arm m_arm = new Arm();
   public static Joystick leftJoy = new Joystick(Constants.leftJoy);
   public static Joystick rightJoy = new Joystick(Constants.rightJoy);
-  public static JoystickButton arm1, arm2, arm3, arm4;
+  public static JoystickButton arm1, arm2, arm3, reset, crate;
 
   // fill in with appropriate angles needed for mechanism
-  private double[] armAngles = {28, 45, 89};
+  private double[] armAngles = {15, 28, 45, 89};
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   
@@ -60,7 +62,8 @@ public class RobotContainer {
     _driveTrain.setDefaultCommand(_arcadeDrive);
     configureButtonBindings();
     _driveToLine = new DriveToALine();
-    test = new AutoDrive2M(_driveTrain, 200);
+    test = new AutoDrive2M(_driveTrain, 50);
+    test1 = new Test();
   }
 
   /**
@@ -73,12 +76,14 @@ public class RobotContainer {
     arm1 = new JoystickButton(leftJoy, Constants.angle1Button);
     arm2 = new JoystickButton(leftJoy, Constants.angle2Button);
     arm3 = new JoystickButton(leftJoy, Constants.angle3Button);
-    arm4 = new JoystickButton(leftJoy, Constants.angle4Button);
+    reset = new JoystickButton(leftJoy, Constants.resetButton);
+    crate = new JoystickButton(leftJoy, Constants.crateButton);
 
-    arm1.toggleWhenPressed(new ArmSetAngle(armAngles[0]));
-    arm2.toggleWhenPressed(new ArmSetAngle(armAngles[1]));
-    arm3.toggleWhenPressed(new ArmSetAngle(armAngles[2]));
-    arm4.toggleWhenPressed(new ResetArm());
+    crate.toggleWhenPressed(new ArmSetAngle(armAngles[0]));
+    arm1.toggleWhenPressed(new ArmSetAngle(armAngles[1]));
+    arm2.toggleWhenPressed(new ArmSetAngle(armAngles[2]));
+    arm3.toggleWhenPressed(new ArmSetAngle(armAngles[3]));
+    reset.toggleWhenPressed(new ResetArm());
   }
 
   /**
@@ -92,7 +97,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return test1;
   }
 
   public static Arm returnArm(){
